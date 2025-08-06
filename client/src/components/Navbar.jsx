@@ -1,13 +1,14 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { assets } from "../assets/assets";
-import { MenuIcon, SearchIcon, XIcon } from "lucide-react";
+import { MenuIcon, SearchIcon, TicketPlus, XIcon } from "lucide-react";
 import { useClerk, UserButton, useUser } from "@clerk/clerk-react";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { user } = useUser();
   const { openSignIn } = useClerk(); // ✅ Correct spelling
+  const navigate = useNavigate();
 
   return (
     <div className="fixed top-0 left-0 z-50 w-full flex items-center justify-between px-6 md:px-16 lg:px-36 py-5">
@@ -28,28 +29,54 @@ const Navbar = () => {
         {/* Close Icon */}
         <XIcon
           className="md:hidden absolute top-6 right-6 w-6 h-6 cursor-pointer"
-          onClick={() => setIsOpen(false)}
+          onClick={() => setIsOpen(!isOpen)}
         />
 
-        {/* Links */}
-        {[
-          { path: "/", label: "Home" },
-          { path: "/movies", label: "Movies" },
-          { path: "/", label: "Theaters" },
-          { path: "/", label: "Releases" },
-          { path: "/favorite", label: "Favorites" },
-        ].map((link, idx) => (
-          <Link
-            key={idx}
-            onClick={() => {
-              scrollTo(0, 0);
-              setIsOpen(false);
-            }}
-            to={link.path}
-          >
-            {link.label}
-          </Link>
-        ))}
+        <Link
+          onClick={() => {
+            scrollTo(0, 0);
+            setIsOpen(false);
+          }}
+          to="/"
+        >
+          Home
+        </Link>
+        <Link
+          onClick={() => {
+            scrollTo(0, 0);
+            setIsOpen(false);
+          }}
+          to="/movies"
+        >
+          Movies
+        </Link>
+        <Link
+          onClick={() => {
+            scrollTo(0, 0);
+            setIsOpen(false);
+          }}
+          to="/"
+        >
+          Theaters
+        </Link>
+        <Link
+          onClick={() => {
+            scrollTo(0, 0);
+            setIsOpen(false);
+          }}
+          to="/"
+        >
+          Releases
+        </Link>
+        <Link
+          onClick={() => {
+            scrollTo(0, 0);
+            setIsOpen(false);
+          }}
+          to="/avorite"
+        >
+          Favorite
+        </Link>
       </div>
 
       {/* Right Side Icons */}
@@ -63,7 +90,15 @@ const Navbar = () => {
             Login
           </button>
         ) : (
-          <UserButton />
+          <UserButton>
+            <UserButton.MenuItems>
+              <UserButton.Action
+                label="My Bookings"
+                labelIcon={<TicketPlus width={15} />}
+                onClick={() => navigate("/my-bookings")}
+              />
+            </UserButton.MenuItems>
+          </UserButton>
         )}
       </div>
 
